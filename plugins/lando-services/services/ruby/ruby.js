@@ -10,6 +10,7 @@ module.exports = function(lando) {
    */
   var versions = [
     '2.4',
+    '2.4-rails',
     '2.2',
     '2.1',
     '1.9',
@@ -33,7 +34,7 @@ module.exports = function(lando) {
     var services = {};
 
     // Path
-    // @todo: need to add global gem locaation?
+    // @todo: need to add global gem location?
     var path = [
       '/usr/local/sbin',
       '/usr/local/bin',
@@ -44,12 +45,14 @@ module.exports = function(lando) {
       '/bin'
     ];
 
+    var gemUserBase = '/var/www/.gem'
     // Volumes
     // Need to add gloval ruby gem location?
     var vols = [
       '/usr/local/bin',
       '/usr/local/share',
-      '/usr/local/bundle'
+      '/usr/local/bundle',
+      'gem_share:' + gemUserBase
     ];
 
     // Basic config
@@ -62,12 +65,21 @@ module.exports = function(lando) {
       command = [command];
     }
 
+
+    var isRails = function (version) {
+      return version.indexOf('-rails') > -1
+    }
+
+    var img = isRails(version) ? 'devwithlando/ruby:' + version : 'ruby:' + version;
     // Start with the ruby base
     var ruby = {
-      image: 'ruby:' + version,
+      image: img,
       environment: {
         TERM: 'xterm',
-        PATH: path.join(':')
+        PATH: path.join(':'),
+        GEM_HOME: gemUserBase,
+        GEM_PATH: gemUserBase,
+        BUNDLE_PATH: gemUserBase,
       },
       'working_dir': config._mount,
       ports: ['80'],
