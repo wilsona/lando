@@ -69,9 +69,9 @@ module.exports = function(lando) {
       return version.indexOf('-rails') > -1;
     };
 
-    var img = isRails(version) ?
-      'devwithlando/ruby:' + version :
-      'ruby:' + version;
+    var img = isRails(version)
+      ? 'devwithlando/ruby:' + version
+      : 'ruby:' + version;
     // Start with the ruby base
     var ruby = {
       image: img,

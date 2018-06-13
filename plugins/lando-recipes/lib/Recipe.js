@@ -104,13 +104,13 @@ class Recipe {
       this.serviceData.cache = this.cache(config.cache);
 
       // Add cache credentials into the ENV
-      let cacheCreds = {
+      const cacheCreds = {
         CACHE_HOST: 'cache',
         CACHE_PORT: (this._.includes(config.cache, 'redis')) ? 6379 : 11211
       };
 
       // Merge in cache creds
-      let envKey = 'services.appserver.overrides.services.environment';
+      const envKey = 'services.appserver.overrides.services.environment';
       this._.set(this.buildData, envKey, this._.merge(this._.get(this.buildData, envKey), cacheCreds));
 
       // Add it as something our tooling needs
@@ -133,7 +133,7 @@ class Recipe {
       // Start setting config
       this.serviceData.database.config = {};
 
-      let database = this.getDbType(config);
+      const database = this.getDbType(config);
 
       // Set custom DB conf
       if (this._.has(config, 'conf.database')) {
@@ -201,7 +201,7 @@ class Recipe {
    * @return {bool}
    */
   includesMySQL(config) {
-    let database = this.getDbType(config);
+    const database = this.getDbType(config);
     return this._.includes(database, 'mysql') ||
       this._.includes(database, 'mariadb');
   }

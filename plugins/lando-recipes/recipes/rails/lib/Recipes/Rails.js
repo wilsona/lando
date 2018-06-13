@@ -28,7 +28,7 @@ class Rails extends Recipe {
    * @inheritdoc
    */
   services(config) {
-    let _ = this.lando.node._;
+    const _ = this.lando.node._;
     // Rails Specific Services
     this.serviceData = {
       appserver: {

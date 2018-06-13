@@ -7,7 +7,7 @@
 const Rails = require('./lib/Recipes/Rails');
 
 module.exports = function(lando) {
-  let rails = new Rails(lando);
+  const rails = new Rails(lando);
   // Return things
   return {
     build: rails.build,
