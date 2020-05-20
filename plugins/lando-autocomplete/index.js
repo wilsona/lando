@@ -16,9 +16,6 @@ const getCommandArgumentCompletion = (task, optionsInput) => {
 };
 
 module.exports = lando => {
-    const pluginAddedObserverCount = 1;
-    // Suppress max listener warnings
-    // app.events.setMaxListeners(app.events.getMaxListeners() + pluginAddedObserverCount);
 
     lando.events.on('post-bootstrap-tasks', lando => {
         lando.autocomplete = {
