@@ -2,15 +2,9 @@
 
 const _ = require('lodash');
 
-const getCommandArgumentCompletion = (tasksList, command, optionsInput) => {
+const getCommandArgumentCompletion = (task, optionsInput) => {
     let options = [];
-    _.forEach(tasksList, task => {
-        const isCommandMatch = command !== task.command;
-        if (isCommandMatch) {
-            return;
-        }
-        options = Object.keys(task.options);
-    });
+    options = Object.keys(task.options);
 
     const missingCompletion = !options instanceof Array;
     if (missingCompletion) {
@@ -19,15 +13,6 @@ const getCommandArgumentCompletion = (tasksList, command, optionsInput) => {
     }
 
     return options;
-};
-
-const getCommandCompletion = tasksList => {
-    const commands = [];
-    _.forEach(_.sortBy(tasksList, 'command'), task => {
-        commands.push(task.command);
-    });
-
-    return commands;
 };
 
 module.exports = lando => {
@@ -40,14 +25,18 @@ module.exports = lando => {
             getCompletions: userInput => {
                 let completions = [];
                 let command, optionsInput;
-                if (userInput.indexOf(' ')) {
-                    // If user is tab completing bin/lando.js <tab>, do this.
-                    [command, ...optionsInput] = userInput.split(' ');
-                    completions = getCommandArgumentCompletion(lando.tasks, command, optionsInput);
+                [command, ...optionsInput] = userInput.split(' ');
+
+                if (optionsInput.length === 0) {
+                    // in command word, return all commands
+                    completions = _.map(lando.tasks, task => task.command);
                 } else {
-                    // If user is tab completing bin/lando.js command <tab>, do this.
-                    completions = getCommandCompletion(lando.tasks);
+                    // command word complete, return its options
+                    completions = getCommandArgumentCompletion(
+                            _.find(lando.tasks, task => command === task.command),
+                            optionsInput);
                 }
+
                 return completions;
             }
         };
