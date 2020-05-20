@@ -12,6 +12,8 @@ const getCommandArgumentCompletion = (task, optionsInput) => {
         return;
     }
 
+    _.pullAll(options, optionsInput);
+
     return options;
 };
 
